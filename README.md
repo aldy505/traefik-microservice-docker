@@ -10,6 +10,6 @@ Then open these paths:
 - localhost:8080/alyssa
 - localhost:8080/pouring-alyssa
 - localhost:8080/danica
-- localhost:8080/customers/<add some value here>
+- localhost:8080/customers/[add some value here]
 
 For seeing the Traefik dashboard, open localhost:8081
