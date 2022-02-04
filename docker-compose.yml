@@ -1,0 +1,43 @@
+services:
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.6
+    # Enables the web UI and tells Traefik to listen to docker
+    command: 
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      # The HTTP port
+      - "8080:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8081:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+  alyssa:
+    build: ./alyssa
+    ports:
+      - 8082:8080
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.alyssa.entrypoints=web"
+      - "traefik.http.routers.alyssa.rule=PathPrefix(`/alyssa`) || PathPrefix(`/pouring-alyssa`)"
+  danica:
+    build: ./danica
+    ports:
+      - 8083:8080
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.danica.entrypoints=web"
+      - "traefik.http.routers.danica.rule=PathPrefix(`/danica`)"
+  fleur:
+    build: ./fleur
+    ports:
+      - 8084:8080
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fleur.entrypoints=web"
+      - "traefik.http.routers.fleur.rule=PathPrefix(`/customers`)"
+  
